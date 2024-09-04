@@ -13,7 +13,7 @@ public class SlotView : MonoBehaviour
 
     private GameObject _left, _right, _center;
 
-    public SlotModel slot {  get; private set; }
+    public SlotModel slot {  get; private set; } 
     private void Start()
     {
         LeftLimit = (_centerPlaceVector.position.x + _leftPlaceVector.position.x) / 2;
