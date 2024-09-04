@@ -1,7 +1,6 @@
 
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Pool : MonoBehaviour
 {
@@ -36,9 +35,10 @@ public class Pool : MonoBehaviour
     public GameObject GetNewObject(string color, Transform transform)
     {
         GameObject obj;
-        switch (color) {
+        switch (color)
+        {
             case "green":
-                if (_greens[0] != null)
+                if (_greens.Count > 0)
                 {
                     obj = _greens[0];
                     obj.gameObject.SetActive(true);
@@ -47,32 +47,35 @@ public class Pool : MonoBehaviour
                     _greens.RemoveAt(0);
                     return obj;
                 }
+
                 obj = Instantiate(GreenPrefab, transform);
                 _allGreens.Add(obj);
                 return obj;
             case "red":
-                if (_reds[0] != null)
+                if (_reds.Count > 0)
                 {
                     obj = _reds[0];
                     obj.gameObject.SetActive(true);
                     //obj.gameObject.transform.parent = transform;
-                    obj .gameObject.transform.position = transform.position;
+                    obj.gameObject.transform.position = transform.position;
                     _reds.RemoveAt(0);
                     return obj;
                 }
+
                 obj = Instantiate(RedPrefab, transform);
                 _allReds.Add(obj);
                 return obj;
             case "yellow":
-                if (_yellows[0] != null)
+                if (_yellows.Count > 0)
                 {
                     obj = _yellows[0];
                     obj.gameObject.SetActive(true);
-                  //  obj.gameObject.transform.parent = transform;
-                    obj.transform.position = transform.position; 
+                    //  obj.gameObject.transform.parent = transform;
+                    obj.transform.position = transform.position;
                     _yellows.RemoveAt(0);
                     return obj;
                 }
+
                 obj = Instantiate(YellowPrefab, transform);
                 _allYellows.Add(obj);
                 return obj;
@@ -80,13 +83,62 @@ public class Pool : MonoBehaviour
                 Debug.LogError("Tryna get wrong color");
                 return null;
         }
+    }
+
+    public GameObject GetNewObject(string color, Vector3 vector)
+        {
+            GameObject obj;
+            switch (color) {
+                case "green":
+                    if (_greens.Count > 0)
+                    {
+                        obj = _greens[0];
+                        obj.gameObject.SetActive(true);
+                        // obj.gameObject.transform.parent = transform;
+                        obj.gameObject.transform.position = vector;
+                        _greens.RemoveAt(0);
+                        return obj;
+                    }
+                    obj = Instantiate(GreenPrefab, vector,GreenPrefab.transform.rotation);
+                    _allGreens.Add(obj);
+                    return obj;
+                case "red":
+                    if (_reds.Count > 0)
+                    {
+                        obj = _reds[0];
+                        obj.gameObject.SetActive(true);
+                        //obj.gameObject.transform.parent = transform;
+                        obj .gameObject.transform.position = vector;
+                        _reds.RemoveAt(0);
+                        return obj;
+                    }
+                    obj = Instantiate(RedPrefab, vector,RedPrefab.transform.rotation);
+                    _allReds.Add(obj);
+                    return obj;
+                case "yellow":
+                    if (_yellows.Count > 0)
+                    {
+                        obj = _yellows[0];
+                        obj.gameObject.SetActive(true);
+                        //  obj.gameObject.transform.parent = transform;
+                        obj.transform.position = vector; 
+                        _yellows.RemoveAt(0);
+                        return obj;
+                    }
+                    obj = Instantiate(YellowPrefab, vector, YellowPrefab.transform.rotation);
+                    _allYellows.Add(obj);
+                    return obj;
+                default:
+                    Debug.LogError("Tryna get wrong color");
+                    return null;
+            }
 
     }
 
     public GameObject GetNewSlot(Transform transform)
     {
         GameObject obj;
-        if (_slots[0] != null)
+        if (_slots.Count > 0)
         {
             obj = _slots[0];
             obj.gameObject.SetActive(true);
@@ -102,7 +154,7 @@ public class Pool : MonoBehaviour
     public GameObject GetNewSlot(Vector3 vector)
     {
         GameObject obj;
-        if (_slots[0] != null)
+        if (_slots.Count > 0)
         {
             obj = _slots[0];
             obj.gameObject.SetActive(true);

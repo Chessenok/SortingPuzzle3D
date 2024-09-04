@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlotPositioning : MonoBehaviour
+public class SlotPositioning : MonoBehaviour, IPositionateSlots
 {
     [SerializeField] private Vector3[] _firstTemplate;
-    private Pool _pool;
+    public Pool pool { get; private set; }
 
     private void OnEnable()
     {
-        _pool = Pool.Instance;
+        pool = Pool.Instance;
     }
 
     public List<GameObject> GetSlotsInPosition(int num)
@@ -19,14 +19,14 @@ public class SlotPositioning : MonoBehaviour
             case 3:
                 foreach (Vector3 vector in _firstTemplate) 
                 {
-                    _list.Add(_pool.GetNewSlot(vector));
+                    _list.Add(pool.GetNewSlot(vector));
                 }
                 return _list;
 
 
 
             default:
-                Debug.LogError("Tryna get wrong template, or it doesnt exist");
+                Debug.LogError($"Tryna get wrong template, or it doesnt exist,{num}");
                 return _list;
         }
     }
