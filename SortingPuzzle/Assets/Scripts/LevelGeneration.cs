@@ -22,7 +22,19 @@ public class LevelGeneration : MonoBehaviour
         CreateSlots();
         CreateObjects();
     }
+    //temporaryShit
+    public List<SlotModel> GetSlots()
+    {
+        return slots;
+    }
 
+
+    public void CreateLevel()
+    {
+        GetData();
+        CreateSlots();
+        CreateObjects();
+    }
     private void GetData()
     {
         layers = _levelData.GetAllLayers();

@@ -26,6 +26,81 @@ public class SlotView : MonoBehaviour
 
     }
 
+    public GameObject GetObject(string place)
+    {
+        if (place == "right")
+        {
+            return _right;
+        } 
+        else if (place == "left")
+        {
+            return _left;
+        }
+        return _center;
+    }
+
+    public bool IsFreePlace(string place)
+    {
+        if (place == "right")
+        {
+            return _right == null;
+        }
+        else if (place == "left")
+        {
+            return _left == null;
+        }
+        return _center == null;
+    }
+
+   // public bool FreeOn
+
+    public void TryPutObject(GameObject obj, string place,out bool success)
+    {
+        if (place == "right")
+        {
+           if (_right == null)
+            {
+                _right = obj;
+                obj.transform.position = _rightPlaceTransform.position;
+                success = true;
+            }
+            else 
+                success = false;
+        }
+        else if (place == "left")
+        {
+           if(_left == null)
+            {
+                _left = obj;
+                obj.transform.position = _leftPlaceTransform.position;
+                success = true;
+            }
+           else
+                success = false;
+        }
+        if (_center == null)
+        {
+            _center = obj;
+            obj.transform.position = _centerPlaceTransform.position;
+            success = true;
+        }
+        else
+            success = false;
+    }
+
+    public string GetMousePosition(float xpos)
+    {
+        if (xpos > RightLimit)
+        {
+            return "right";
+        }
+        else if (xpos < LeftLimit)
+        {
+            return "left";
+        }
+        return "center";
+    }
+
     public Vector3 GetLeftPos()
     {
         return _leftPlaceTransform.position;

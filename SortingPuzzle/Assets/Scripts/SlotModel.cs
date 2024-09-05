@@ -16,7 +16,7 @@ public struct Layer
 }
 public class SlotModel
 {
-    public GameObject Slot { get; private set; }
+    public GameObject SlotGO { get; private set; }
     public SlotView SlotView { get; private set; }
     public List<Layer> Layers;
     public int LockedFor {  get; private set; }
@@ -25,7 +25,7 @@ public class SlotModel
   
     public SlotModel(GameObject slot,SlotView slotView, List<Layer> layers, int lockedFor)
     {
-        Slot = slot;
+        SlotGO = slot;
         Layers = layers;
         LockedFor = lockedFor;
         SlotView = slotView;
