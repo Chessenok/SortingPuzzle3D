@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,8 +9,8 @@ public class DragDropController : MonoBehaviour
     [SerializeField] private LevelGeneration _levelGeneration;
     private GameObject currentSlot;
     private Dictionary<GameObject, SlotModel> slots = new Dictionary<GameObject, SlotModel>();
-    
-
+    [SerializeField] private AnimationCurve _animationCurve;
+    [SerializeField] private float _animationDuration;
 
     public void TakeSlots()
     {
@@ -35,6 +36,21 @@ public class DragDropController : MonoBehaviour
         }
     }
 
+
+    private void ReturnObjectBack()
+    {
+
+    }
+
+    private IEnumerator MovingCoroutine(GameObject gameObject, Vector3 finalPos) 
+    {
+        Vector3 startpos = gameObject.transform.position;
+        for(float i = 0; i < _animationDuration; i+=Time.deltaTime)
+        {
+            gameObject.transform.position = new Vector3 (Mathf.Lerp(startpos.x, finalPos.x, _animationCurve.Evaluate(i / _animationDuration)), Mathf.Lerp(startpos.y, finalPos.y, _animationCurve.Evaluate(i / _animationDuration)), Mathf.Lerp(startpos.z, finalPos.z, _animationCurve.Evaluate(i / _animationDuration)));
+        }
+        yield return null;
+    }
     private void StartDrag()
     {   
         if(slots.Count == 0) 
@@ -47,9 +63,9 @@ public class DragDropController : MonoBehaviour
             {
                 currentSlot = hitInfo.collider.gameObject.transform.parent.gameObject;
                 SlotModel slotModel = slots[currentSlot];
-                string place = slotModel.SlotView.GetMousePosition(Input.mousePosition.x);
+                string place = slotModel.SlotView.GetMousePosition(_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 9f)).x);
                 _currentDraggedObject = slotModel.SlotView.GetObject(place);
-                Debug.Log($"current drag obj == {_currentDraggedObject != null}");
+                Debug.Log($"current drag obj == {_currentDraggedObject != null}, place - {place}, pos = {_camera.ScreenToWorldPoint(Input.mousePosition).x},pos2 = {Input.mousePosition.x}, screebn={_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,Input.mousePosition.y,9f))}");
             }
         }
     }
@@ -58,17 +74,16 @@ public class DragDropController : MonoBehaviour
     private void EndDrag()
     {
         Debug.Log("EndDrag");
-        // Raycast to check if the object is dropped on a valid slot
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hitInfo))
         {
             if (hitInfo.collider.CompareTag("Slot"))
             {
-                string place = slots[hitInfo.collider.gameObject.transform.parent.gameObject].SlotView.GetMousePosition(Input.mousePosition.x);
+                string place = slots[hitInfo.collider.gameObject.transform.parent.gameObject].SlotView.GetMousePosition(_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 9f)).x);
                 if (slots[hitInfo.collider.gameObject.transform.parent.gameObject].SlotView.IsFreePlace(place)) {
                     bool success; 
                     slots[hitInfo.collider.gameObject.transform.parent.gameObject].SlotView.TryPutObject(_currentDraggedObject,place,out success);
-
+                    Debug.Log($"Success, ");
                 }
             }
             else
@@ -102,11 +117,9 @@ public class DragDropController : MonoBehaviour
 
     private void MoveObjectWithMouse()
     {
-        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hitInfo))
-        {
-            _currentDraggedObject.transform.position = new Vector3(hitInfo.point.x,hitInfo.point.y, 2f);// should get fixed after
-        }
+        Vector3 vector = _camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 9f));
+            _currentDraggedObject.transform.position = new Vector3(vector.x,vector.y, -2f);// should get fixed after
+        
     }
 
 }

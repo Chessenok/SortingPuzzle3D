@@ -53,21 +53,28 @@ public class LevelGeneration : MonoBehaviour
     {
         for (int i = 0; i < slots.Count; i++)
         {
+            int j = 0;
             SlotModel slot = slots[i];
             foreach (Layer layer in slot.Layers)
-            {
+            {               
+                Dictionary<string,GameObject> objectLayer = new Dictionary<string, GameObject>();
                 if (layer.LeftObject != "")
                 {
-                    slot.LeftGO = _objectPostitioning.GetObjectOnPos(slot.SlotView, "left", layer.LeftObject);
+                    objectLayer.Add("left", _objectPostitioning.GetObjectOnPos(slot.SlotView, "left", layer.LeftObject, j));
+                    // slot.SlotView.TryPutObject(slot.LeftGO, "left",out s);
                 }
                 if (layer.RightObject != "")
                 {
-                    slot.RightGO = _objectPostitioning.GetObjectOnPos(slot.SlotView, "right", layer.RightObject);
+                    objectLayer.Add("right", _objectPostitioning.GetObjectOnPos(slot.SlotView, "right", layer.RightObject, j));
+                   // slot.SlotView.TryPutObject(slot.LeftGO, "right", out s);
                 }
                 if (layer.CenterObject != "")
                 {
-                    slot.CenterGO = _objectPostitioning.GetObjectOnPos(slot.SlotView, "center", layer.CenterObject);
+                    objectLayer.Add("left", _objectPostitioning.GetObjectOnPos(slot.SlotView, "center", layer.CenterObject, j));
+                   // slot.SlotView.TryPutObject(slot.LeftGO, "center", out s);
                 }
+                slot.AddLayer(objectLayer);
+                j++;
             }
         }   
     }

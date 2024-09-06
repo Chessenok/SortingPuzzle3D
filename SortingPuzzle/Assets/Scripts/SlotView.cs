@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -12,9 +13,9 @@ public class SlotView : MonoBehaviour
     [FormerlySerializedAs("_centerPlaceVector")] [SerializeField] private Transform _centerPlaceTransform;
 
 
-    private GameObject _left, _right, _center;
+    private Dictionary<string, GameObject> _currentLayer;
 
-    public SlotModel slot {  get; private set; } 
+    public SlotModel slotModel {  get; private set; } 
     private void Start()
     {
         LeftLimit = (_centerPlaceTransform.position.x + _leftPlaceTransform.position.x) / 2;
@@ -28,65 +29,42 @@ public class SlotView : MonoBehaviour
 
     public GameObject GetObject(string place)
     {
-        if (place == "right")
-        {
-            return _right;
-        } 
-        else if (place == "left")
-        {
-            return _left;
-        }
-        return _center;
+        GameObject controlObject;
+        _currentLayer.TryGetValue(place, out controlObject);
+        return controlObject;
     }
 
     public bool IsFreePlace(string place)
     {
-        if (place == "right")
+        GameObject controlObject;
+        _currentLayer.TryGetValue(place, out controlObject);
+        if (controlObject != null)
         {
-            return _right == null;
+            return true;
         }
-        else if (place == "left")
-        {
-            return _left == null;
-        }
-        return _center == null;
+       return false;
     }
+
 
    // public bool FreeOn
 
     public void TryPutObject(GameObject obj, string place,out bool success)
     {
-        if (place == "right")
+        if (IsFreePlace(place))
         {
-           if (_right == null)
+            if(_currentLayer.ContainsKey(place))
             {
-                _right = obj;
-                obj.transform.position = _rightPlaceTransform.position;
-                success = true;
+                _currentLayer[place] = obj;
             }
-            else 
-                success = false;
-        }
-        else if (place == "left")
-        {
-           if(_left == null)
-            {
-                _left = obj;
-                obj.transform.position = _leftPlaceTransform.position;
-                success = true;
-            }
-           else
-                success = false;
-        }
-        if (_center == null)
-        {
-            _center = obj;
-            obj.transform.position = _centerPlaceTransform.position;
+            else
+                _currentLayer.Add(place, obj);
+
             success = true;
         }
         else
             success = false;
     }
+   
 
     public string GetMousePosition(float xpos)
     {
