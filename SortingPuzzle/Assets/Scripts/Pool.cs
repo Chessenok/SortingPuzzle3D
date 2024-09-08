@@ -32,6 +32,29 @@ public class Pool : MonoBehaviour
         }
     }
 
+    public void ClearScene()
+    {
+        foreach (var obj in _greens)
+        {
+            obj.SetActive(false);
+            _greens.Add(obj);
+        }
+        foreach (var obj in _yellows)
+        {
+            obj.SetActive(false);
+            _yellows.Add(obj);
+        }
+        foreach (var obj in _reds)
+        {
+            obj.SetActive(false);
+            _reds.Add(obj);
+        }
+        foreach (var obj in _slots)
+        {
+            obj.SetActive(false);
+            _slots.Add(obj);
+        }
+    }
     public GameObject GetNewObject(string color, Transform transform)
     {
         GameObject obj;

@@ -70,7 +70,7 @@ public class LevelGeneration : MonoBehaviour
                 }
                 if (layer.CenterObject != "")
                 {
-                    objectLayer.Add("left", _objectPostitioning.GetObjectOnPos(slot.SlotView, "center", layer.CenterObject, j));
+                    objectLayer.Add("center", _objectPostitioning.GetObjectOnPos(slot.SlotView, "center", layer.CenterObject, j));
                    // slot.SlotView.TryPutObject(slot.LeftGO, "center", out s);
                 }
                 slot.AddLayer(objectLayer);

@@ -6,7 +6,6 @@ public class SlotView : MonoBehaviour
 {
     public float LeftLimit { get; private set; }
     public float RightLimit { get; private set; }
-    private int _lockedFor;
     [SerializeField] private float[] _layers;
     [FormerlySerializedAs("_leftPlaceVector")][SerializeField] private Transform _leftPlaceTransform;
     [FormerlySerializedAs("_rightPlaceVector")] [SerializeField] private Transform _rightPlaceTransform;
@@ -27,18 +26,46 @@ public class SlotView : MonoBehaviour
 
     }
 
+    public void ResetSlot()
+    {
+        slotModel.ResetSlot();
+        _currentLayer.Clear();
+    }
+
     public GameObject GetObject(string place)
     {
-        GameObject controlObject;
-        _currentLayer.TryGetValue(place, out controlObject);
-        return controlObject;
+        GameObject controlObject = null;
+        if (_currentLayer.TryGetValue(place,out controlObject))
+        {
+            return controlObject;
+        }
+        return null;
+        
+    }
+
+    public GameObject TryGetObject(string place, out bool success)
+    {
+        GameObject gameObject = null;
+        if (_currentLayer == null)
+        {
+            Debug.Log("currentLayer == null");
+        }
+        if (_currentLayer.TryGetValue(place,out gameObject))
+        {
+            success = true;
+            return gameObject;
+        }
+
+        success = false;
+        return null;
+        
     }
 
     public bool IsFreePlace(string place)
     {
         GameObject controlObject;
         _currentLayer.TryGetValue(place, out controlObject);
-        if (controlObject != null)
+        if (controlObject == null)
         {
             return true;
         }
@@ -48,7 +75,7 @@ public class SlotView : MonoBehaviour
 
    // public bool FreeOn
 
-    public void TryPutObject(GameObject obj, string place,out bool success)
+    public void TryPutObject(GameObject obj, string place,out bool success,out Vector3 pos)
     {
         if (IsFreePlace(place))
         {
@@ -64,7 +91,17 @@ public class SlotView : MonoBehaviour
         else
             success = false;
     }
-   
+
+    public void RemoveObject(string place)
+    {
+        if (_currentLayer.ContainsKey(place))
+            _currentLayer.Remove(place);
+    }
+
+    public void SetFirstLayer(Dictionary<string, GameObject> layer)
+    {
+        _currentLayer = layer;
+    }
 
     public string GetMousePosition(float xpos)
     {

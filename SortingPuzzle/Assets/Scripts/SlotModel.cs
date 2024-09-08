@@ -25,9 +25,19 @@ public class SlotModel
 
     private List<Dictionary<string, GameObject>> layerList = new List<Dictionary<string, GameObject>>();
 
+    public void ResetSlot()
+    {
+        layerList.Clear();
+        Layers.Clear();
+        LockedFor = 0;
+    }
     public void AddLayer(Dictionary<string, GameObject> layer)
     {
         layerList.Add(layer);
+        if (layerList.Count == 1)
+        {
+            SlotView.SetFirstLayer(layer);
+        }
     }
 
 

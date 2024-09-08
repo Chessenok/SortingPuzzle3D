@@ -11,7 +11,7 @@ public class DragDropController : MonoBehaviour
     private Dictionary<GameObject, SlotModel> slots = new Dictionary<GameObject, SlotModel>();
     [SerializeField] private AnimationCurve _animationCurve;
     [SerializeField] private float _animationDuration;
-
+    private Vector3 startPos;
     public void TakeSlots()
     {
        List<SlotModel> slotList = _levelGeneration.GetSlots();//temporary solution, should get better after
@@ -52,7 +52,9 @@ public class DragDropController : MonoBehaviour
         yield return null;
     }
     private void StartDrag()
-    {   
+    {
+        bool success;
+        GameObject controlGameObject;
         if(slots.Count == 0) 
             TakeSlots();
         Debug.Log("StartDrag");
@@ -64,7 +66,10 @@ public class DragDropController : MonoBehaviour
                 currentSlot = hitInfo.collider.gameObject.transform.parent.gameObject;
                 SlotModel slotModel = slots[currentSlot];
                 string place = slotModel.SlotView.GetMousePosition(_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 9f)).x);
-                _currentDraggedObject = slotModel.SlotView.GetObject(place);
+                controlGameObject = slotModel.SlotView.TryGetObject(place, out success);
+                if (success)
+                    _currentDraggedObject = controlGameObject;
+                startPos = _currentDraggedObject.transform.position;
                 Debug.Log($"current drag obj == {_currentDraggedObject != null}, place - {place}, pos = {_camera.ScreenToWorldPoint(Input.mousePosition).x},pos2 = {Input.mousePosition.x}, screebn={_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,Input.mousePosition.y,9f))}");
             }
         }
@@ -82,7 +87,7 @@ public class DragDropController : MonoBehaviour
                 string place = slots[hitInfo.collider.gameObject.transform.parent.gameObject].SlotView.GetMousePosition(_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 9f)).x);
                 if (slots[hitInfo.collider.gameObject.transform.parent.gameObject].SlotView.IsFreePlace(place)) {
                     bool success; 
-                    slots[hitInfo.collider.gameObject.transform.parent.gameObject].SlotView.TryPutObject(_currentDraggedObject,place,out success);
+                    slots[hitInfo.collider.gameObject.transform.parent.gameObject].SlotView.TryPutObject(_currentDraggedObject,place,out success, out Vector3 finalPos);
                     Debug.Log($"Success, ");
                 }
             }
