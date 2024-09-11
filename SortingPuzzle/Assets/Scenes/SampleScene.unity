@@ -2318,7 +2318,7 @@ MonoBehaviour:
   m_Generation: {fileID: 1816213735}
   tg: {fileID: 1816213736}
   _losePanel: {fileID: 1354439071}
-  _winPanel: {fileID: 0}
+  _winPanel: {fileID: 958433861}
   _timer: {fileID: 581877800}
   _winFlow: {fileID: 1816213738}
 --- !u!1 &1969747467
