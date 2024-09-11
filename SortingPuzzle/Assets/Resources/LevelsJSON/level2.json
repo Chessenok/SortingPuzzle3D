@@ -1,0 +1,30 @@
+{
+  "time": 90.0,
+  "containers": [
+    {
+      "lockValue": 0,
+      "layers": [
+        { "left": "red", "center": "", "right": "red" },
+        { "left": "red", "center": "", "right": "" },
+        { "left": "", "center": "", "right": "" }
+      ]
+    },
+    {
+      "lockValue": 0,
+      "layers": [
+        { "left": "green", "center": "", "right": "green" },
+        { "left": "", "center": "", "right": "green" },
+        { "left": "", "center": "", "right": "" }
+      ]
+    },
+    {
+      "lockValue": 0,
+      "layers": [
+        { "left": "", "center": "", "right": "" },
+        { "left": "", "center": "", "right": "" },
+        { "left": "", "center": "", "right": "" }
+      ]
+    }
+  ]
+}
+

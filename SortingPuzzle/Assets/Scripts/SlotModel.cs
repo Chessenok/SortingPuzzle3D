@@ -55,6 +55,8 @@ public class SlotModel
         Layers.Clear();
         LockedFor = 0;
     }
+
+
     public void AddLayer(Dictionary<string, GameObject> layer)
     {
 

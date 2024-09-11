@@ -12,22 +12,36 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject _winPanel;
     [SerializeField] private Timer _timer;
     [SerializeField] private WinFlow _winFlow;
-
+    private LevelPaths levelPaths;
     public event Action OnStartLevel;
     public event Action OnWinLevel;
+    private List<LevelData> levelData = new List<LevelData>();
+    private LoadFromJsonFile _loader;
 
     private void OnEnable()
     {
         if(Instance == null) {
         Instance = this;
         }
+        levelPaths = Resources.Load<LevelPaths>("LevelPaths");
+        _loader = new LoadFromJsonFile();
+        Debug.Log($"levelpaths num = {levelPaths.LevelFilePaths.Length}");
+        if (levelPaths != null && levelPaths.LevelFilePaths.Length > 0)
+        {
+            foreach (var path in levelPaths.LevelFilePaths)
+            {
+               levelData.Add(_loader.LoadLevel(path));
+            }
+        }
     }
+
+
 
 
 
     private void Start()
     {
-        m_Generation.StartLevel(tg._levelData);
+        m_Generation.StartLevel(levelData[0]);
         _timer.OnLoseEvent += OnLose;
         _winFlow.OnLayerWin += OnWinLayer;
         OnStartLevel?.Invoke();

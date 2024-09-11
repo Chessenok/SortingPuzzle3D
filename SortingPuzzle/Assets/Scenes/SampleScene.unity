@@ -2225,6 +2225,9 @@ MonoBehaviour:
   _layering:
   - -0.625
   - -0.1
+  - 0.4
+  - 0.9
+  - 1.3
 --- !u!114 &1816213735
 MonoBehaviour:
   m_ObjectHideFlags: 0

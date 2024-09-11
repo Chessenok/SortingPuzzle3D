@@ -1,18 +1,19 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class SlotView : MonoBehaviour
 {
     public float LeftLimit { get; private set; }
     public float RightLimit { get; private set; }
-    [SerializeField] private float[] _layers;
-    [FormerlySerializedAs("_leftPlaceVector")][SerializeField] private Transform _leftPlaceTransform;
-    [FormerlySerializedAs("_rightPlaceVector")] [SerializeField] private Transform _rightPlaceTransform;
-    [FormerlySerializedAs("_centerPlaceVector")] [SerializeField] private Transform _centerPlaceTransform;
-
-
-
+    [SerializeField] private TextMeshPro _lockText;
+    [SerializeField] private Transform _leftPlaceTransform;
+    [SerializeField] private Transform _rightPlaceTransform;
+    [SerializeField] private Transform _centerPlaceTransform;
+    private int lockedFor;
+    [SerializeField] private GameObject _lockPanel;
+    private bool locked;
+    private IWinFlow winFlow;
     private Dictionary<string, GameObject> _currentLayer;
 
     public SlotModel slotModel {  get; private set; } 
@@ -20,9 +21,11 @@ public class SlotView : MonoBehaviour
     {
         LeftLimit = (_centerPlaceTransform.position.x + _leftPlaceTransform.position.x) / 2;
         RightLimit = (_centerPlaceTransform.position.x + _rightPlaceTransform.position.x) / 2;
+        LevelManager.Instance.GetWinFlow(out winFlow);
+        winFlow.OnLayerWin += OnWinLayer;
     }
 
-    public void ChangeLayer()
+    private void ChangeLayer()
     {
         _currentLayer = new Dictionary<string, GameObject>();
         if(slotModel.ThereAreMoreLayers())
@@ -33,6 +36,27 @@ public class SlotView : MonoBehaviour
     public void SetModel(SlotModel model)
     {
         slotModel = model;
+        lockedFor = model.LockedFor;
+        if (lockedFor > 0) 
+        {
+            _lockPanel.SetActive(true);
+            _lockText.text = $"Locked for:{lockedFor}";
+            locked = true;
+        }
+    }
+
+    private void OnWinLayer(SlotModel slotModel)
+    {
+        lockedFor -= 1;
+        if (lockedFor > 0)
+        {
+            _lockText.text = $"Locked for:{lockedFor}";
+        }
+        if (lockedFor == 0)
+        {
+            _lockPanel.SetActive(false);
+            locked = false;
+        }
     }
 
     public void ResetSlot()
@@ -58,6 +82,10 @@ public class SlotView : MonoBehaviour
         if (_currentLayer == null)
         {
             Debug.Log("currentLayer == null");
+        }
+        if (locked)
+        {
+            success = false; return null;
         }
         if (_currentLayer.TryGetValue(place,out gameObject))
         {
