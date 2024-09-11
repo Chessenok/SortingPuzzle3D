@@ -3,7 +3,7 @@ using UnityEngine;
 public class ObjectPostitioning : MonoBehaviour
 {
     private Pool _pool;
-    private void Start()
+    private void OnEnable()
     {
         _pool = Pool.Instance;
     }

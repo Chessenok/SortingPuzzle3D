@@ -1,4 +1,3 @@
-
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,7 +9,10 @@ public class Pool : MonoBehaviour
     [SerializeField] private GameObject GreenPrefab;
     [SerializeField] private GameObject YellowPrefab;
     [SerializeField] private GameObject SlotPrefab;
+    [SerializeField] private GameObject StarPrefab;
 
+    private List<GameObject> _stars = new List<GameObject>();
+    private List<GameObject> _allStars = new List<GameObject>();
     private List<GameObject> _greens = new List<GameObject>();
     private List<GameObject> _reds = new List<GameObject>();
     private List<GameObject> _yellows = new List<GameObject>();
@@ -34,26 +36,72 @@ public class Pool : MonoBehaviour
 
     public void ClearScene()
     {
-        foreach (var obj in _greens)
+        foreach (var obj in _allGreens)
         {
-            obj.SetActive(false);
+            if (obj.activeSelf == true)
+            {
+                obj.SetActive(false);
+                _greens.Add(obj);
+            }
+        }
+        foreach (var obj in _allYellows)
+        {
+            if (obj.activeSelf == true)
+            {
+                obj.SetActive(false);
+                _yellows.Add(obj);
+            }
+        }
+        foreach (var obj in _allReds)
+        {
+            if (obj.activeSelf == true)
+            {
+                obj.SetActive(false);
+                _reds.Add(obj);
+            }
+        }
+        foreach (var obj in _allSlots)
+        {
+            if (obj.activeSelf == true)
+            {
+                obj.SetActive(false);
+                _slots.Add(obj);
+            }
+        }
+    }
+
+
+    public GameObject GetNewStar(SlotModel slotModel,string place)
+    {
+        GameObject go;
+            if (_stars.Count == 0)
+            {
+                go = Instantiate(StarPrefab,slotModel.SlotView.GetPos(place),StarPrefab.transform.rotation);
+                _allStars.Add(go);
+                return go;
+            }
+         go = _stars[0];
+        _stars.RemoveAt(0);
+        go.SetActive(true);
+        go.transform.position = slotModel.SlotView.GetPos(place);
+        return go;
+    }
+
+    public void TakeStarToPool(GameObject go)
+    {
+        go.SetActive(false);
+        _stars.Add(go);
+    }
+    public void TakeToPool(GameObject obj)
+    {
+        if (obj.CompareTag("Green"))
             _greens.Add(obj);
-        }
-        foreach (var obj in _yellows)
-        {
-            obj.SetActive(false);
-            _yellows.Add(obj);
-        }
-        foreach (var obj in _reds)
-        {
-            obj.SetActive(false);
+        else if (obj.CompareTag("Red"))
             _reds.Add(obj);
-        }
-        foreach (var obj in _slots)
-        {
-            obj.SetActive(false);
-            _slots.Add(obj);
-        }
+        else 
+            _yellows.Add(obj);
+        obj.SetActive(false);
+            
     }
     public GameObject GetNewObject(string color, Transform transform)
     {
@@ -158,6 +206,17 @@ public class Pool : MonoBehaviour
 
     }
 
+
+    public int RemainingActiveObjects()
+    {
+        int reds = _allReds.Count - _reds.Count;
+        int greens = _allGreens.Count - _greens.Count;
+        int yellows = _allYellows.Count - _yellows.Count;
+
+        Debug.Log($"remaining reds {reds}, remaining greens {greens}, remaining yellows {yellows}");
+        return reds + yellows + greens;
+
+    }
     public GameObject GetNewSlot(Transform transform)
     {
         GameObject obj;

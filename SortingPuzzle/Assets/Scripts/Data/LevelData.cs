@@ -6,14 +6,6 @@ public class LevelData
     private List<List<Layer>> layers = new List<List<Layer>>();
     private List<int> locks = new List<int>();
 
-    public static LevelData Instance { get; private set; }
-
-    public void OnCreate()
-    {
-        if (Instance == null) { Instance = this; } 
-    }
-
-
     public void TakeTime(int time)
     {
         _totalTime = time;

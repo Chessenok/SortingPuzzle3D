@@ -12,6 +12,10 @@ public class DragDropController : MonoBehaviour
     [SerializeField] private AnimationCurve _animationCurve;
     [SerializeField] private float _animationDuration;
     private Vector3 startPos;
+    private string startPlace,finalPlace;
+    private SlotModel currentSlotModel;
+    private ILoseFlow loseFlow;
+    private bool _lost = false;
     public void TakeSlots()
     {
        List<SlotModel> slotList = _levelGeneration.GetSlots();//temporary solution, should get better after
@@ -23,11 +27,23 @@ public class DragDropController : MonoBehaviour
     }
     private void Start()
     {
-       // TakeSlots();
+        LevelManager.Instance.GetLoseFlow(out loseFlow);
+        loseFlow.OnLoseEvent += OnLose;
+        LevelManager.Instance.OnStartLevel += OnStartLevel;
+    }
+
+    private void OnStartLevel()
+    {
+        _lost = false;
+    }
+    private void OnLose()
+    {
+        _lost = true;
     }
 
     void Update()
     {
+        if (_lost) return;
         HandleInput();
 
         if (_currentDraggedObject != null)
@@ -37,9 +53,17 @@ public class DragDropController : MonoBehaviour
     }
 
 
-    private void ReturnObjectBack()
+    private void ReturnObjectBack(GameObject gameobject, string place,SlotModel slotModel)
     {
-
+        bool success;
+        Vector3 pos;
+        
+        slotModel.SlotView.TryPutObject(gameobject,place,out success,out pos);
+        if (success == false)
+        {
+            Debug.LogError($"Cannot return object back, place == {place}");
+        }
+        StartCoroutine(MovingCoroutine(_currentDraggedObject, pos));
     }
 
     private IEnumerator MovingCoroutine(GameObject gameObject, Vector3 finalPos) 
@@ -64,17 +88,23 @@ public class DragDropController : MonoBehaviour
             if (hitInfo.collider.CompareTag("Slot")) 
             {
                 currentSlot = hitInfo.collider.gameObject.transform.parent.gameObject;
-                SlotModel slotModel = slots[currentSlot];
-                string place = slotModel.SlotView.GetMousePosition(_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 9f)).x);
-                controlGameObject = slotModel.SlotView.TryGetObject(place, out success);
+                currentSlotModel = slots[currentSlot];
+                startPlace = currentSlotModel.SlotView.GetMousePosition(_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 9f)).x);
+                controlGameObject = currentSlotModel.SlotView.TryGetObject(startPlace, out success);
                 if (success)
                     _currentDraggedObject = controlGameObject;
-                startPos = _currentDraggedObject.transform.position;
-                Debug.Log($"current drag obj == {_currentDraggedObject != null}, place - {place}, pos = {_camera.ScreenToWorldPoint(Input.mousePosition).x},pos2 = {Input.mousePosition.x}, screebn={_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,Input.mousePosition.y,9f))}");
+                else
+                {
+                    _currentDraggedObject = null;
+                    startPlace = null;
+                    currentSlotModel = null;
+                }
+                   
+                
+               // Debug.Log($"current drag obj == {_currentDraggedObject != null}, place - {place}, pos = {_camera.ScreenToWorldPoint(Input.mousePosition).x},pos2 = {Input.mousePosition.x}, screebn={_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x,Input.mousePosition.y,9f))}");
             }
         }
-    }
-
+    } 
 
     private void EndDrag()
     {
@@ -84,26 +114,31 @@ public class DragDropController : MonoBehaviour
         {
             if (hitInfo.collider.CompareTag("Slot"))
             {
-                string place = slots[hitInfo.collider.gameObject.transform.parent.gameObject].SlotView.GetMousePosition(_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 9f)).x);
-                if (slots[hitInfo.collider.gameObject.transform.parent.gameObject].SlotView.IsFreePlace(place)) {
-                    bool success; 
-                    slots[hitInfo.collider.gameObject.transform.parent.gameObject].SlotView.TryPutObject(_currentDraggedObject,place,out success, out Vector3 finalPos);
+                finalPlace = slots[hitInfo.collider.gameObject.transform.parent.gameObject].SlotView.GetMousePosition(_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 9f)).x);
+                if (slots[hitInfo.collider.gameObject.transform.parent.gameObject].SlotView.IsFreePlace(finalPlace))
+                {
+                    bool success;
+                    slots[hitInfo.collider.gameObject.transform.parent.gameObject].SlotView.TryPutObject(_currentDraggedObject, finalPlace, out success, out Vector3 finalPos);
                     Debug.Log($"Success, ");
+                    if (success)
+                    {
+                        StartCoroutine(MovingCoroutine(_currentDraggedObject, finalPos));
+                        currentSlotModel.SlotView.OnSuccessMuteObject();
+                    }
+                      
+
+
                 }
+                else
+                    ReturnObjectBack(_currentDraggedObject, startPlace, currentSlotModel);
             }
             else
-            {
-                // Return to original position if not dropped on a valid slot
-               _currentDraggedObject.transform.position = Vector3.zero;
-            }
+                ReturnObjectBack(_currentDraggedObject, startPlace, currentSlotModel);
         }
         else
-        {
-            // Return to original position if no raycast hit
-            _currentDraggedObject.transform.position = Vector3.zero;
-        }
+            ReturnObjectBack(_currentDraggedObject, startPlace, currentSlotModel);
 
-        _currentDraggedObject = null;  // End dragging
+        _currentDraggedObject = null; 
     }
 
     private void HandleInput()

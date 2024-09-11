@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class LevelGeneration : MonoBehaviour
@@ -10,30 +11,21 @@ public class LevelGeneration : MonoBehaviour
     private List<List<Layer>> layers = new List<List<Layer>>();
     [SerializeField] private SlotPositioning _positionateSlots;
     [SerializeField] private ObjectPostitioning _objectPostitioning;
-    [SerializeField] private TestGenerate tg;
-    private void OnEnable()
-    {
-        _levelData = tg._levelData;
-    }
-
-    private void Start()
-    {
-        GetData();
-        CreateSlots();
-        CreateObjects();
-    }
+    [SerializeField] private Timer _timer;
+   
     //temporaryShit
     public List<SlotModel> GetSlots()
     {
         return slots;
     }
 
-
-    public void CreateLevel()
+    public void StartLevel(LevelData level)
     {
+        _levelData = level;
         GetData();
         CreateSlots();
         CreateObjects();
+        _timer.StartTimer(level.GetTime());//test
     }
     private void GetData()
     {
@@ -42,6 +34,7 @@ public class LevelGeneration : MonoBehaviour
     }
     private void CreateSlots()
     {
+        slots.Clear();
         List<GameObject> golist = _positionateSlots.GetSlotsInPosition(locks.Count);
         for (int i = 0; i < locks.Count; i++)
         {
@@ -75,6 +68,7 @@ public class LevelGeneration : MonoBehaviour
                 }
                 slot.AddLayer(objectLayer);
                 j++;
+                Debug.Log($"Created Layer, slots count = {slots.Count}");
             }
         }   
     }

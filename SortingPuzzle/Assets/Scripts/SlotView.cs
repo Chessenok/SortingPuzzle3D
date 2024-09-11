@@ -12,6 +12,7 @@ public class SlotView : MonoBehaviour
     [FormerlySerializedAs("_centerPlaceVector")] [SerializeField] private Transform _centerPlaceTransform;
 
 
+
     private Dictionary<string, GameObject> _currentLayer;
 
     public SlotModel slotModel {  get; private set; } 
@@ -21,9 +22,17 @@ public class SlotView : MonoBehaviour
         RightLimit = (_centerPlaceTransform.position.x + _rightPlaceTransform.position.x) / 2;
     }
 
-    public void ChangeLayout()
+    public void ChangeLayer()
     {
-
+        _currentLayer = new Dictionary<string, GameObject>();
+        if(slotModel.ThereAreMoreLayers())
+        {
+            slotModel.MoveLayersAndGetNextLayer(out _currentLayer);
+        }
+    }
+    public void SetModel(SlotModel model)
+    {
+        slotModel = model;
     }
 
     public void ResetSlot()
@@ -53,6 +62,7 @@ public class SlotView : MonoBehaviour
         if (_currentLayer.TryGetValue(place,out gameObject))
         {
             success = true;
+            RemoveObject(place);
             return gameObject;
         }
 
@@ -61,15 +71,34 @@ public class SlotView : MonoBehaviour
         
     }
 
+    private void CheckWin()
+    {
+        if(_currentLayer.Count == 3)
+        {
+            if(WinFlow.Instance.CheckWinSlot(_currentLayer,slotModel))
+                ChangeLayer();
+
+        }
+    }
+
+    public void OnSuccessMuteObject()
+    {
+        if(_currentLayer.Count == 0)
+            ChangeLayer();
+    }
+
     public bool IsFreePlace(string place)
     {
-        GameObject controlObject;
-        _currentLayer.TryGetValue(place, out controlObject);
-        if (controlObject == null)
-        {
-            return true;
+        if (_currentLayer == null) 
+        { 
+            Debug.LogError("No layer");
+            return false; 
         }
-       return false;
+        if( _currentLayer.ContainsKey(place) )
+        {
+            return false;
+        }
+        return true;
     }
 
 
@@ -87,9 +116,11 @@ public class SlotView : MonoBehaviour
                 _currentLayer.Add(place, obj);
 
             success = true;
+            CheckWin();
         }
         else
             success = false;
+        pos = GetPos(place);
     }
 
     public void RemoveObject(string place)
@@ -116,6 +147,21 @@ public class SlotView : MonoBehaviour
         return "center";
     }
 
+    public Vector3 GetPos(string place)
+    {
+        switch (place)
+        {
+            case "left":
+                return GetLeftPos();
+            case "right":
+                return GetRightPos();
+            case "center":
+                return GetCenterPos();
+            default:
+                Debug.LogError("Tryna get wrong place");
+                return Vector3.zero;
+        }
+    }
     public Vector3 GetLeftPos()
     {
         return _leftPlaceTransform.position;

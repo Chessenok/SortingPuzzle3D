@@ -7,13 +7,13 @@ using UnityEngine;
         
         private void Awake()
         {
-            _levelData.OnCreate();
             _levelData.TakeTime(180);
             List<List<Layer>> list = new List<List<Layer>>();
             List<Layer> slist = new List<Layer>();
             List<Layer> tlist = new List<Layer>();
             List<Layer> qlist = new List<Layer>();
             slist.Add(new Layer("","red","green"));
+            slist.Add(new Layer("yellow", "red", "yellow"));
             tlist.Add(new Layer("yellow","","green"));
             qlist.Add(new Layer("red","green",""));
             
