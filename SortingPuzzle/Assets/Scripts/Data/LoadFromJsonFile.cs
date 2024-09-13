@@ -59,8 +59,6 @@ public class LoadFromJsonFile
             
             LevelIndex levelIndex = JsonUtility.FromJson<LevelIndex>(json);
 
-            //Debug.Log("Loaded current level: " + (levelIndex.index + 1));
-
             return levelIndex.index;
         }
         else

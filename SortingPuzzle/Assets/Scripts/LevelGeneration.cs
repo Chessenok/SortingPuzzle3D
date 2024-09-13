@@ -25,7 +25,7 @@ public class LevelGeneration : MonoBehaviour
         GetData();
         CreateSlots();
         CreateObjects();
-        _timer.StartTimer(level.GetTime());//test
+        _timer.StartTimer(level.GetTime());
     }
     private void GetData()
     {
@@ -54,17 +54,14 @@ public class LevelGeneration : MonoBehaviour
                 if (layer.LeftObject != "")
                 {
                     objectLayer.Add("left", _objectPostitioning.GetObjectOnPos(slot.SlotView, "left", layer.LeftObject, j));
-                    // slot.SlotView.TryPutObject(slot.LeftGO, "left",out s);
                 }
                 if (layer.RightObject != "")
                 {
                     objectLayer.Add("right", _objectPostitioning.GetObjectOnPos(slot.SlotView, "right", layer.RightObject, j));
-                   // slot.SlotView.TryPutObject(slot.LeftGO, "right", out s);
                 }
                 if (layer.CenterObject != "")
                 {
                     objectLayer.Add("center", _objectPostitioning.GetObjectOnPos(slot.SlotView, "center", layer.CenterObject, j));
-                   // slot.SlotView.TryPutObject(slot.LeftGO, "center", out s);
                 }
                 slot.AddLayer(objectLayer);
                 j++;

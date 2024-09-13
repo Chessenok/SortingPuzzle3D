@@ -8,7 +8,7 @@ public class Timer : MonoBehaviour , ILoseFlow
     private float remainingTime;
     private float _toSecond;
 
-    public event System.Action OnLoseEvent;
+    public event Action OnLoseEvent;
     private bool _lost;
 
     private void Start()
@@ -42,10 +42,6 @@ public class Timer : MonoBehaviour , ILoseFlow
                 OnLose();
             }
         }
-    }
-    public void ContinueTimer()
-    {
-
     }
     private void UpdateUITime()
     {

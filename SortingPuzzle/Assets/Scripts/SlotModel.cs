@@ -110,8 +110,6 @@ public class SlotModel
         SlotView = slotView;
         slotView.SetModel(this);
     }
-
-   // public void RemoveObjectAt(string place,)
 }
 
 

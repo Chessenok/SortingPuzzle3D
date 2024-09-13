@@ -9,10 +9,7 @@ public class Pool : MonoBehaviour
     [SerializeField] private GameObject GreenPrefab;
     [SerializeField] private GameObject YellowPrefab;
     [SerializeField] private GameObject SlotPrefab;
-    [SerializeField] private GameObject StarPrefab;
 
-    private List<GameObject> _stars = new List<GameObject>();
-    private List<GameObject> _allStars = new List<GameObject>();
     private List<GameObject> _greens = new List<GameObject>();
     private List<GameObject> _reds = new List<GameObject>();
     private List<GameObject> _yellows = new List<GameObject>();
@@ -70,28 +67,34 @@ public class Pool : MonoBehaviour
         }
     }
 
+    #region unImplemented
 
-    public GameObject GetNewStar(SlotModel slotModel,string place)
-    {
-        GameObject go;
-            if (_stars.Count == 0)
-            {
-                go = Instantiate(StarPrefab,slotModel.SlotView.GetPos(place),StarPrefab.transform.rotation);
-                _allStars.Add(go);
-                return go;
-            }
-         go = _stars[0];
-        _stars.RemoveAt(0);
-        go.SetActive(true);
-        go.transform.position = slotModel.SlotView.GetPos(place);
-        return go;
-    }
 
-    public void TakeStarToPool(GameObject go)
-    {
-        go.SetActive(false);
-        _stars.Add(go);
-    }
+    /* public void TakeStarToPool(GameObject go)
+     {
+         go.SetActive(false);
+         _stars.Add(go);
+     }*/
+
+    /* public GameObject GetNewStar(SlotModel slotModel,string place)
+     {
+         GameObject go;
+             if (_stars.Count == 0)
+             {
+                 go = Instantiate(StarPrefab,slotModel.SlotView.GetPos(place),StarPrefab.transform.rotation);
+                 _allStars.Add(go);
+                 return go;
+             }
+          go = _stars[0];
+         _stars.RemoveAt(0);
+         go.SetActive(true);
+         go.transform.position = slotModel.SlotView.GetPos(place);
+         return go;
+     }   *unimplemented* */
+    #endregion
+
+
+
     public void TakeToPool(GameObject obj)
     {
         if (obj.CompareTag("Green"))
@@ -165,7 +168,6 @@ public class Pool : MonoBehaviour
                     {
                         obj = _greens[0];
                         obj.gameObject.SetActive(true);
-                        // obj.gameObject.transform.parent = transform;
                         obj.gameObject.transform.position = vector;
                         _greens.RemoveAt(0);
                         return obj;
@@ -178,7 +180,6 @@ public class Pool : MonoBehaviour
                     {
                         obj = _reds[0];
                         obj.gameObject.SetActive(true);
-                        //obj.gameObject.transform.parent = transform;
                         obj .gameObject.transform.position = vector;
                         _reds.RemoveAt(0);
                         return obj;
@@ -191,7 +192,6 @@ public class Pool : MonoBehaviour
                     {
                         obj = _yellows[0];
                         obj.gameObject.SetActive(true);
-                        //  obj.gameObject.transform.parent = transform;
                         obj.transform.position = vector; 
                         _yellows.RemoveAt(0);
                         return obj;
@@ -224,7 +224,6 @@ public class Pool : MonoBehaviour
         {
             obj = _slots[0];
             obj.gameObject.SetActive(true);
-           // obj.transform.SetParent(transform);
             obj.transform.position = transform.position;
             _slots.RemoveAt(0);
             return obj;
@@ -240,7 +239,6 @@ public class Pool : MonoBehaviour
         {
             obj = _slots[0];
             obj.gameObject.SetActive(true);
-           // obj.transform.SetParent(transform);
             obj.transform.position = vector;
             _slots.RemoveAt(0);
             return obj;

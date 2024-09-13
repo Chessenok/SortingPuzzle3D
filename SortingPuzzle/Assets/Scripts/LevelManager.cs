@@ -2,12 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelManager : MonoBehaviour 
-{
-    private LevelData m_Data;
+public class LevelManager : MonoBehaviour
+{ 
     public static LevelManager Instance { get; private set; }
     [SerializeField] private LevelGeneration m_Generation;
-    [SerializeField] private TestGenerate tg;
     [SerializeField] private GameObject _losePanel;
     [SerializeField] private GameObject _winPanel;
     [SerializeField] private Timer _timer;
@@ -86,7 +84,7 @@ public class LevelManager : MonoBehaviour
 
     private void SaveNewLevel()
     {
-        if (_currentLevelIndex == levelData.Count)
+        if (_currentLevelIndex == levelData.Count - 1)
         {
             return;
         }

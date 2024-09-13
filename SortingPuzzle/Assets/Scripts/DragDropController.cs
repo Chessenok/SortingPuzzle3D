@@ -123,15 +123,11 @@ public class DragDropController : MonoBehaviour
                 {
                     bool success;
                     slots[hitInfo.collider.gameObject.transform.parent.gameObject].SlotView.TryPutObject(_currentDraggedObject, finalPlace, out success, out Vector3 finalPos);
-                    Debug.Log($"Success, ");
                     if (success)
                     {
                         StartCoroutine(MovingCoroutine(_currentDraggedObject, finalPos));
                         currentSlotModel.SlotView.OnSuccessMuteObject();
                     }
-                      
-
-
                 }
                 else
                     ReturnObjectBack(_currentDraggedObject, startPlace, currentSlotModel);
@@ -162,7 +158,7 @@ public class DragDropController : MonoBehaviour
     private void MoveObjectWithMouse()
     {
         Vector3 vector = _camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 9f));
-            _currentDraggedObject.transform.position = new Vector3(vector.x,vector.y, -2f);// should get fixed after
+            _currentDraggedObject.transform.position = new Vector3(vector.x,vector.y, -2f);// should change this after
         
     }
 

@@ -29,7 +29,6 @@ public class Combo : MonoBehaviour, IUpdateCombo
         {
             return;
         }
-        Debug.Log("combo up");
         _currentComboTime = _totalComboTime;
         _currentCombo += 1;
         UpdateComboText();

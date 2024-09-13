@@ -35,7 +35,6 @@ public class SlotView : MonoBehaviour
     }
     public void SetModel(SlotModel model)
     {
-       // model.GetFirstLayer();
         slotModel = model;
         lockedFor = model.LockedFor;
         if (lockedFor > 0) 
