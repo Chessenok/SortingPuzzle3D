@@ -12,7 +12,9 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject _winPanel;
     [SerializeField] private Timer _timer;
     [SerializeField] private WinFlow _winFlow;
+    private int _currentLevelIndex;
     private LevelPaths levelPaths;
+    private string savePathFile;
     public event Action OnStartLevel;
     public event Action OnWinLevel;
     private List<LevelData> levelData = new List<LevelData>();
@@ -20,12 +22,14 @@ public class LevelManager : MonoBehaviour
 
     private void OnEnable()
     {
-        if(Instance == null) {
-        Instance = this;
+        if(Instance == null) 
+        { 
+            Instance = this;
         }
         levelPaths = Resources.Load<LevelPaths>("LevelPaths");
+        savePathFile = levelPaths.SaveLevelInfoPath;
         _loader = new LoadFromJsonFile();
-        Debug.Log($"levelpaths num = {levelPaths.LevelFilePaths.Length}");
+        _currentLevelIndex = _loader.LoadCurrentLevel(savePathFile);
         if (levelPaths != null && levelPaths.LevelFilePaths.Length > 0)
         {
             foreach (var path in levelPaths.LevelFilePaths)
@@ -36,14 +40,20 @@ public class LevelManager : MonoBehaviour
     }
 
 
-
-
-
     private void Start()
     {
-        m_Generation.StartLevel(levelData[0]);
         _timer.OnLoseEvent += OnLose;
         _winFlow.OnLayerWin += OnWinLayer;
+        StartLevel();
+    }
+
+    public void StartLevel()
+    {
+        Pool.Instance.ClearScene();
+        _winPanel.SetActive(false);
+        _losePanel.SetActive(false);
+        m_Generation.StartLevel(levelData[_currentLevelIndex]);
+        Debug.Log($"Loaded level : {_currentLevelIndex + 1}");
         OnStartLevel?.Invoke();
     }
 
@@ -51,22 +61,13 @@ public class LevelManager : MonoBehaviour
     {
         winFlow = _winFlow; return;
     }
-
+    
     public void GetLoseFlow(out ILoseFlow loseFlow)
     {
         loseFlow = _timer; return;
     }
-    public void RestartLevel()
-    {
-        Pool.Instance.ClearScene();
-        _losePanel.SetActive(false);
-       // _winPanel.SetActive(false);
-        m_Generation.StartLevel(tg._levelData);
-        OnStartLevel?.Invoke();
-    }
 
-
-
+    
     private void OnLose()
     {
         _losePanel.SetActive(true);
@@ -76,8 +77,25 @@ public class LevelManager : MonoBehaviour
     {
         if(Pool.Instance.RemainingActiveObjects() == 0)
         {
-            _winPanel.SetActive(true);
+            _winPanel.SetActive(true); 
+            SaveNewLevel();
             OnWinLevel?.Invoke();
         }
     }
+
+
+    private void SaveNewLevel()
+    {
+        if (_currentLevelIndex == levelData.Count)
+        {
+            return;
+        }
+        _currentLevelIndex += 1;
+        SaveToJSONFile saver = new SaveToJSONFile();
+        saver.SaveCurrentLevel(_currentLevelIndex,savePathFile);
+    }
 }
+
+
+
+

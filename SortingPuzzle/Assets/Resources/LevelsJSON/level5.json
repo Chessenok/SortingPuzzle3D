@@ -70,16 +70,16 @@
         { "left": "yellow", "center": "red", "right": "green" },
         { "left": "", "center": "green", "right": "" },
         { "left": "red", "center": "", "right": "yellow" },
-        { "left": "green", "center": "yellow", "right": "" }
+        { "left": "green", "center": "yellow", "right": "green" }
       ]
     },
     {
-      "lockValue": 1,
+      "lockValue": 0,
       "layers": [
         { "left": "green", "center": "yellow", "right": "red" },
         { "left": "", "center": "red", "right": "green" },
         { "left": "yellow", "center": "", "right": "green" },
-        { "left": "red", "center": "", "right": "yellow" }
+        { "left": "red", "center": "red", "right": "yellow" }
       ]
     },
     {
@@ -88,7 +88,7 @@
         { "left": "", "center": "yellow", "right": "red" },
         { "left": "", "center": "green", "right": "" },
         { "left": "yellow", "center": "red", "right": "green" },
-        { "left": "green", "center": "", "right": "" }
+        { "left": "green", "center": "yellow", "right": "yellow" }
       ]
     },
     {

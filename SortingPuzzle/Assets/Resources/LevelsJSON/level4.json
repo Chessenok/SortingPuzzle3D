@@ -1,40 +1,67 @@
 {
-  "time": 180.0,
+  "time": 200.0,
   "containers": [
     {
       "lockValue": 1,
       "layers": [
-        { "left": "red", "center": "yellow", "right": "green" },
-        { "left": "yellow", "center": "red", "right": "green" },
-        { "left": "green", "center": "yellow", "right": "" },
-        { "left": "", "center": "green", "right": "red" }
+        { "left": "red", "center": "", "right": "yellow" },
+        { "left": "green", "center": "yellow", "right": "" }
       ]
     },
     {
       "lockValue": 2,
       "layers": [
-        { "left": "", "center": "red", "right": "green" },
-        { "left": "", "center": "yellow", "right": "red" },
-        { "left": "green", "center": "", "right": "yellow" },
-        { "left": "", "center": "green", "right": "red" }
-      ]
-    },
-    {
-      "lockValue": 0,
-      "layers": [
-        { "left": "red", "center": "green", "right": "yellow" },
-        { "left": "green", "center": "red", "right": "" },
-        { "left": "yellow", "center": "", "right": "" },
+        { "left": "red", "center": "green", "right": "red" },
         { "left": "", "center": "yellow", "right": "green" }
       ]
     },
     {
       "lockValue": 0,
       "layers": [
-        { "left": "green", "center": "yellow", "right": "red" },
-        { "left": "red", "center": "green", "right": "" },
-        { "left": "", "center": "yellow", "right": "green" },
-        { "left": "yellow", "center": "", "right": "red" }
+        { "left": "yellow", "center": "", "right": "green" },
+        { "left": "red", "center": "green", "right": "green" }
+      ]
+    },
+    {
+      "lockValue": 1,
+      "layers": [
+        { "left": "yellow", "center": "red", "right": "yellow" },
+        { "left": "green", "center": "red", "right": "yellow" }
+      ]
+    },
+    {
+      "lockValue": 0,
+      "layers": [
+        { "left": "yellow", "center": "green", "right": "red" },
+        { "left": "green", "center": "red", "right": "red" }
+      ]
+    },
+    {
+      "lockValue": 1,
+      "layers": [
+        { "left": "", "center": "green", "right": "yellow" },
+        { "left": "red", "center": "green", "right": "yellow" }
+      ]
+    },
+    {
+      "lockValue": 2,
+      "layers": [
+        { "left": "yellow", "center": "red", "right": "yellow" },
+        { "left": "", "center": "green", "right": "red" }
+      ]
+    },
+    {
+      "lockValue": 0,
+      "layers": [
+        { "left": "green", "center": "red", "right": "yellow" },
+        { "left": "", "center": "yellow", "right": "green" }
+      ]
+    },
+    {
+      "lockValue": 0,
+      "layers": [
+        { "left": "red", "center": "", "right": "green" },
+        { "left": "yellow", "center": "red", "right": "" }
       ]
     }
   ]

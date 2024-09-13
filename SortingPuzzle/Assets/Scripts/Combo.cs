@@ -12,6 +12,7 @@ public class Combo : MonoBehaviour, IUpdateCombo
     [SerializeField] private RectTransform _rectTransform;
     [SerializeField] private TextMeshProUGUI _textMeshProUGUI;
     private bool _noCombo;
+    private bool _levelFinished;
     private void Start()
     {
         _levelManager = LevelManager.Instance;
@@ -19,10 +20,15 @@ public class Combo : MonoBehaviour, IUpdateCombo
         winFlow.OnLayerWin += ComboUp;
         _levelManager.GetLoseFlow(out loseFlow);
         loseFlow.OnLoseEvent += OnLose;
-        _levelManager.OnWinLevel += StopGame;
+        _levelManager.OnWinLevel += OnWin;
+        _levelManager.OnStartLevel += OnStartLevel;
     }
     public void ComboUp(SlotModel slot)
     {
+        if (_levelFinished)
+        {
+            return;
+        }
         Debug.Log("combo up");
         _currentComboTime = _totalComboTime;
         _currentCombo += 1;
@@ -30,7 +36,16 @@ public class Combo : MonoBehaviour, IUpdateCombo
         _noCombo = false;
     }
 
+    private void OnStartLevel()
+    {
+        _levelFinished = false;
+    }
     private void OnLose()
+    {
+        StopGame();
+    }
+
+    private void OnWin()
     {
         StopGame();
     }
@@ -53,6 +68,10 @@ public class Combo : MonoBehaviour, IUpdateCombo
     {
         _currentCombo = 0;
         _currentComboTime = 0f;
+        UpdateComboText();
+        _noCombo = true;
+        _levelFinished = true;
+        _rectTransform.localScale = new Vector3(0f, 1f, 1f);
     }
     private void UpdateComboText()
     {

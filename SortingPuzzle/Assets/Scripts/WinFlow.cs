@@ -5,7 +5,6 @@ using UnityEngine;
 public class WinFlow : MonoBehaviour , IWinFlow
 {
     public static WinFlow Instance;
-   // public delegate void WinHandler (SlotModel slotModel);
     public event Action<SlotModel> OnLayerWin;
 
     private void Awake()

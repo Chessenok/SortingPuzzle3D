@@ -17,3 +17,5 @@ MonoBehaviour:
   - Assets/Resources/LevelsJSON/level2.json
   - Assets/Resources/LevelsJSON/level3.json
   - Assets/Resources/LevelsJSON/level4.json
+  - Assets/Resources/LevelsJSON/level5.json
+  saveLevelInfoPath: Assets/Resources/LevelsJSON/save.json

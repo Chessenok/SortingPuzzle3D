@@ -1,31 +1,46 @@
 {
-  "time": 120.0,
+  "time": 180.0,
   "containers": [
     {
       "lockValue": 0,
       "layers": [
-        { "left": "red", "center": "yellow", "right": "green" },
-        { "left": "yellow", "center": "green", "right": "red" },
-        { "left": "green", "center": "", "right": "" },
-        { "left": "yellow", "center": "", "right": "red" }
-      ]
-    },
-    {
-      "lockValue": 1,
-      "layers": [
-        { "left": "", "center": "red", "right": "green" },
-        { "left": "", "center": "yellow", "right": "green" },
         { "left": "red", "center": "", "right": "yellow" },
-        { "left": "", "center": "green", "right": "red" }
+        { "left": "green", "center": "yellow", "right": "" }
       ]
     },
     {
       "lockValue": 0,
       "layers": [
-        { "left": "red", "center": "green", "right": "yellow" },
+        { "left": "yellow", "center": "", "right": "green" },
+        { "left": "red", "center": "", "right": "yellow" }
+      ]
+    },
+    {
+      "lockValue": 0,
+      "layers": [
+        { "left": "", "center": "green", "right": "" },
+        { "left": "yellow", "center": "red", "right": "yellow" }
+      ]
+    },
+    {
+      "lockValue": 0,
+      "layers": [
         { "left": "yellow", "center": "red", "right": "" },
-        { "left": "", "center": "", "right": "green" },
-        { "left": "green", "center": "", "right": "yellow" }
+        { "left": "green", "center": "", "right": "red" }
+      ]
+    },
+    {
+      "lockValue": 0,
+      "layers": [
+        { "left": "green", "center": "yellow", "right": "" },
+        { "left": "red", "center": "", "right": "" }
+      ]
+    },
+    {
+      "lockValue": 0,
+      "layers": [
+        { "left": "", "center": "green", "right": "yellow" },
+        { "left": "", "center": "", "right": "" }
       ]
     }
   ]

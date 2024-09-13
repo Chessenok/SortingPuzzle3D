@@ -56,6 +56,10 @@ public class SlotModel
         LockedFor = 0;
     }
 
+    public void GetFirstLayer()
+    {
+        SlotView.SetFirstLayer(layerList[0]);
+    }
 
     public void AddLayer(Dictionary<string, GameObject> layer)
     {

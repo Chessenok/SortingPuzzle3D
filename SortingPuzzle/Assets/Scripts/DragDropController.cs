@@ -16,10 +16,12 @@ public class DragDropController : MonoBehaviour
     private SlotModel currentSlotModel;
     private ILoseFlow loseFlow;
     private bool _lost = false;
+    
+    
     public void TakeSlots()
     {
-       List<SlotModel> slotList = _levelGeneration.GetSlots();//temporary solution, should get better after
-       
+       List<SlotModel> slotList = _levelGeneration.GetSlots();
+       slots.Clear();
         foreach (SlotModel slot in slotList)
         {
             slots.Add(slot.SlotGO, slot);
@@ -35,6 +37,7 @@ public class DragDropController : MonoBehaviour
     private void OnStartLevel()
     {
         _lost = false;
+        TakeSlots();
     }
     private void OnLose()
     {
@@ -72,8 +75,9 @@ public class DragDropController : MonoBehaviour
         for(float i = 0; i < _animationDuration; i+=Time.deltaTime)
         {
             gameObject.transform.position = new Vector3 (Mathf.Lerp(startpos.x, finalPos.x, _animationCurve.Evaluate(i / _animationDuration)), Mathf.Lerp(startpos.y, finalPos.y, _animationCurve.Evaluate(i / _animationDuration)), Mathf.Lerp(startpos.z, finalPos.z, _animationCurve.Evaluate(i / _animationDuration)));
+            yield return null;
         }
-        yield return null;
+        gameObject.transform.position = finalPos;
     }
     private void StartDrag()
     {

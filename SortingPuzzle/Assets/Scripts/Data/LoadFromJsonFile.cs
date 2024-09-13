@@ -50,26 +50,25 @@ public class LoadFromJsonFile
         return levelData;
     }
 
-   /* private bool IsValidLayer(Layer layer)
+    public int LoadCurrentLevel(string filePath)
     {
-        string[] validColors = { "red", "yellow", "green", "" };
-        return System.Array.Exists(validColors, color => color == layer.left) &&
-               System.Array.Exists(validColors, color => color == layer.center) &&
-               System.Array.Exists(validColors, color => color == layer.right);
-    }
 
-    public void ValidateLevel(Level level)
-    {
-        foreach (var container in level.containers)
+        if (File.Exists(filePath))
         {
-            foreach (var layer in container.layers)
-            {
-                if (!IsValidLayer(layer))
-                {
-                    Debug.LogError("Invalid layer detected");
-                }
-            }
+            string json = File.ReadAllText(filePath);
+            
+            LevelIndex levelIndex = JsonUtility.FromJson<LevelIndex>(json);
+
+            //Debug.Log("Loaded current level: " + (levelIndex.index + 1));
+
+            return levelIndex.index;
         }
-    }*/
+        else
+        {
+            Debug.LogError("No saved level found. Starting from level 1.");
+            return 0; 
+        }
+    }
+   
 
 }

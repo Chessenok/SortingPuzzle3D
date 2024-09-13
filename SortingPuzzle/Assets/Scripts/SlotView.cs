@@ -35,6 +35,7 @@ public class SlotView : MonoBehaviour
     }
     public void SetModel(SlotModel model)
     {
+       // model.GetFirstLayer();
         slotModel = model;
         lockedFor = model.LockedFor;
         if (lockedFor > 0) 
@@ -58,12 +59,7 @@ public class SlotView : MonoBehaviour
             locked = false;
         }
     }
-
-    public void ResetSlot()
-    {
-        slotModel.ResetSlot();
-        _currentLayer.Clear();
-    }
+    
 
     public GameObject GetObject(string place)
     {
@@ -128,10 +124,7 @@ public class SlotView : MonoBehaviour
         }
         return true;
     }
-
-
-   // public bool FreeOn
-
+    
     public void TryPutObject(GameObject obj, string place,out bool success,out Vector3 pos)
     {
         if (IsFreePlace(place))
